@@ -57,9 +57,7 @@ process checkReferences {
 process alignReads {
     label "wfalignment"
     cpus params.threads
-    memory {
-        combined_refs.size() > 1e9 ? "31 GB" : "11 GB"
-    }
+    memory "256 GB"
     input:
         tuple val(meta), path(input)
         path combined_refs
