@@ -58,6 +58,7 @@ process alignReads {
     label "wfalignment"
     cpus params.threads
     memory "256 GB"
+    cpus 64
     input:
         tuple val(meta), path(input)
         path combined_refs
@@ -66,8 +67,8 @@ process alignReads {
     output:
         tuple val(meta), path("aligned.sorted.bam"), path("aligned.sorted.bam.bai")
     script:
-        int sorting_threads = Math.min((task.cpus / 3) as int, 3)
-        int mapping_threads = task.cpus - sorting_threads
+        int sorting_threads = 58
+        int mapping_threads = 58
         // the minimum for `params.threads` in the schema is `4` and we should have
         // positive values for both thread vars, but can't hurt to make extra sure
         sorting_threads = Math.max(1, sorting_threads)
