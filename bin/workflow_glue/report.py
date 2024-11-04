@@ -38,19 +38,26 @@ def main(args):
     # read counts if available
     counts = read_data.counts(args.counts) if args.counts is not None else None
 
+    def normalize_ref(ref):
+    # Rimuove il simbolo '>' se presente
+        return str(ref).lstrip(">")
+
+
     # add a column with the respective ref. files to the stats dataframes
     for df in (flagstat_df, depth_df):
         if df is None:
             continue
         try:
             df["ref_file"] = (
-                df["ref"].apply(lambda ref: refname2reffile[f">{ref}"]).astype("category")
+                df["ref"].apply(lambda ref: refname2reffile[normalize_ref(ref)]).astype("category")
             )
         except KeyError as e:
             (missing_ref,) = e.args
             raise ValueError(
                 f"Reference '{missing_ref}' not found in the provided "
                 f"reference files {ref_files}."
+                f"Available references: {list(refname2reffile.keys())}"
+                f"Available files: {ref_files}"
             )
 
     # create the report
