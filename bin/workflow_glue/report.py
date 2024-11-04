@@ -44,7 +44,7 @@ def main(args):
             continue
         try:
             df["ref_file"] = (
-                df["ref"].apply(lambda ref: refname2reffile[ref]).astype("category")
+                df["ref"].apply(lambda ref: refname2reffile[f">{ref}"]).astype("category")
             )
         except KeyError as e:
             (missing_ref,) = e.args
